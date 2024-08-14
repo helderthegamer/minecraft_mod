@@ -1,6 +1,11 @@
 package net.heldertheking.firstmod;
 
 import com.mojang.logging.LogUtils;
+import net.heldertheking.firstmod.block.ModBlocks;
+import net.heldertheking.firstmod.item.ModCreativeModeTabs;
+import net.heldertheking.firstmod.item.ModItem;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
@@ -28,7 +33,11 @@ public class FirstMod
     {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        // Register the commonSetup method for modloading
+        ModCreativeModeTabs.register(modEventBus);
+
+        ModItem.register(modEventBus);
+        ModBlocks.register(modEventBus);
+
         modEventBus.addListener(this::commonSetup);
 
         MinecraftForge.EVENT_BUS.register(this);
@@ -41,8 +50,11 @@ public class FirstMod
     }
 
     // Add the example block item to the building blocks tab
-    private void addCreative(BuildCreativeModeTabContentsEvent event)
-    {
+    private void addCreative(BuildCreativeModeTabContentsEvent event) {
+        if(event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
+            event.accept(ModItem.SAPPHIRE);
+            event.accept(ModItem.RAW_SAPPHIRE);
+        }
 
     }
 
